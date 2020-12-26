@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getPostCountAsync,
+  getPostListAsync,
+  getPostAsync,
+} from "./redux/actions/postActions";
+import "./App.css";
+import { Route, Switch } from "react-router-dom";
+import Posts from "./components/Posts";
+import configContext from "./context/configContext";
+import config from "./.env.config.json";
 
-function App() {
+function App({ env }) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // dispatch(getPostCountAsync());
+    dispatch(getPostListAsync());
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <configContext.Provider value={config[env]}>
+      <div className="container">
+        <center>
+          <Switch>
+            <Route path="/" exact>
+              <Posts />
+            </Route>
+          </Switch>
+        </center>
+      </div>
+    </configContext.Provider>
   );
 }
 
